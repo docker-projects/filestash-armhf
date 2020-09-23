@@ -1,0 +1,35 @@
+kind: pipeline
+name: default
+
+platform:
+  os: linux
+  arch: arm
+
+workspace:
+  base: /app
+
+steps:
+- name: clone-filestash
+  image: drone/git
+  commands:
+  - git clone https://github.com/mickael-kerjean/filestash.git
+  - cd filestash && git reset --hard d8fe013
+
+- name: docker
+  image: plugins/docker
+  settings:
+    repo: lbischof/filestash
+    cache_from: lbischof/filestash
+    context: filestash
+    dockerfile: Dockerfile
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+
+# This should output armhf (not armel)
+# https://github.com/moby/moby/issues/34875
+- name: docker-arm
+  image: debian
+  commands:
+  - dpkg --print-architecture
