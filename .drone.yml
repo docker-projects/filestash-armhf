@@ -13,7 +13,7 @@ steps:
   image: drone/git
   commands:
   - git clone https://github.com/mickael-kerjean/filestash.git
-  - cd filestash && git reset --hard d8fe013
+  - cd filestash && git reset --hard adfd98e
 
 - name: docker
   image: plugins/docker
